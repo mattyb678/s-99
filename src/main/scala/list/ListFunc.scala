@@ -43,4 +43,10 @@ object ListFunc {
     case head :: tail             => head :: flatten(tail)
     case Nil                      => List()
   }
+
+  def compress[T] (list: List[T]): List[T] = list match {
+    case h :: (tail @ h1 :: _) => if (h == h1) compress(tail) else h :: compress(tail)
+    case h :: Nil          => List(h)
+    case Nil               => List()
+  }
 }

@@ -231,5 +231,50 @@ class TestList extends FunSuite {
     assert(oneList === List(1,2,3))
     val twoLists = ListFunc.flatten(List(List("a", "b"), List("c", "d")))
     assert(twoLists === List("a", "b", "c", "d"))
+    val list = ListFunc.flatten(List(List(1, 1), 2, List(3, List(5, 8))))
+    assert(list === List(1, 1, 2, 3, 5, 8))
+  }
+
+  test("compressing empty list gives empty list") {
+    new TestLists {
+      val listInt = ListFunc.compress(emptyListInt)
+      assert(listInt === List())
+      val listStr = ListFunc.compress(emptyListString)
+      assert(listStr === List())
+    }
+  }
+
+  test("compressing 1 item list is just a one item list") {
+    new TestLists {
+      val listInt = ListFunc.compress(oneItemListInt)
+      assert(listInt === List(100))
+      val listStr = ListFunc.compress(oneItemListString)
+      assert(listStr === List("hello"))
+    }
+  }
+
+  test("compressing many itemed list with no duplicates") {
+    new TestLists {
+      val listInt = ListFunc.compress(manyInts)
+      assert(listInt === manyInts)
+      val listStr = ListFunc.compress(manyStrings)
+      assert(listStr === listStr)
+    }
+  }
+
+  test("compress lists with one value duplicated") {
+    val list2 = ListFunc.compress(List(42, 42))
+    assert(list2 === List(42))
+    val list3 = ListFunc.compress(List("ok", "ok", "ok"))
+    assert(list3 === List("ok"))
+    val list10 = ListFunc.compress(List(10, 10, 10, 10, 10, 10, 10, 10, 10, 10))
+    assert(list10 === List(10))
+  }
+
+  test("compress lists with multiple values duplicated") {
+    val list23 = ListFunc.compress(List(7, 7, 1, 1, 1))
+    assert(list23 === ListFunc.compress(List(7, 1)))
+    val list131 = ListFunc.compress(List("hello", "ok", "ok", "ok", "yo"))
+    assert(list131 === ListFunc.compress(List("hello", "ok", "yo")))
   }
 }
