@@ -141,6 +141,11 @@ class TestList extends FunSuite {
     }
   }
 
+  test("test length of really long list should not stack overflow") {
+    val longLength = ListFunc.length(List.range(1, 10001))
+    assert(longLength === 10000)
+  }
+
   test("reversing empty list is empty list") {
     new TestLists {
       val listInt = ListFunc.reverse(emptyListInt)
@@ -168,6 +173,11 @@ class TestList extends FunSuite {
       val revStr = List("hello", "ok", "functions", "list", "test", "to", "strings", "of", "list", "long")
       assert(listStr === revStr)
     }
+  }
+
+  test("reverse really long list shouldn't stack overflow") {
+    val longlist = ListFunc.reverse(List.range(1, 10001))
+    assert(longlist === List.range(10000, 0, -1))
   }
 
   test("empty list is palindrome") {
