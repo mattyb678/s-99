@@ -203,4 +203,11 @@ class TestList extends FunSuite {
     val strPal = ListFunc.isPalindrome(List[String]("a","b","b","a"))
     assert(strPal)
   }
+
+  test("flatten an empty list is an empty list") {
+    new TestLists {
+      val listInt = ListFunc.flatten(emptyListInt)
+      assert(listInt === List())
+    }
+  }
 }
