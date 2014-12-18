@@ -208,6 +208,28 @@ class TestList extends FunSuite {
     new TestLists {
       val listInt = ListFunc.flatten(emptyListInt)
       assert(listInt === List())
+      val listStr = ListFunc.flatten(emptyListString)
+      assert(listStr === List())
     }
+  }
+
+  test("flattening an already flattened list is the same list") {
+    new TestLists {
+      val flatListOneInt = ListFunc.flatten(oneItemListInt)
+      assert(flatListOneInt === oneItemListInt)
+      val flatListOneStr = ListFunc.flatten(oneItemListString)
+      assert(flatListOneStr === oneItemListString)
+      val flatListInt = ListFunc.flatten(manyInts)
+      assert(flatListInt === manyInts)
+      val flatListStr = ListFunc.flatten(manyStrings)
+      assert(flatListStr === manyStrings)
+    }
+  }
+
+  test("flattening lists that need to be flattened") {
+    val oneList = ListFunc.flatten(List(List(1,2,3)))
+    assert(oneList === List(1,2,3))
+    val twoLists = ListFunc.flatten(List(List("a", "b"), List("c", "d")))
+    assert(twoLists === List("a", "b", "c", "d"))
   }
 }
