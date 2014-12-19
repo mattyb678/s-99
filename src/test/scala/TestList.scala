@@ -245,6 +245,11 @@ class TestList extends FunSuite {
     assert(list === List(1, 1, 2, 3, 5, 8))
   }
 
+  test("flatten a really long list should not stack overflow") {
+    val longlist = ListFunc.flatten(List.range(1, 10001))
+    assert(longlist === List.range(1, 10001))
+  }
+
   test("compressing empty list gives empty list") {
     new TestLists {
       val listInt = ListFunc.compress(emptyListInt)
@@ -286,5 +291,54 @@ class TestList extends FunSuite {
     assert(list23 === ListFunc.compress(List(7, 1)))
     val list131 = ListFunc.compress(List("hello", "ok", "ok", "ok", "yo"))
     assert(list131 === ListFunc.compress(List("hello", "ok", "yo")))
+  }
+
+  test("pack empty list is an empty list with an empty list") {
+    new TestLists {
+      val packedInt = ListFunc.pack(emptyListInt)
+      assert(packedInt === List(List()))
+      val packedStr = ListFunc.pack(emptyListString)
+      assert(packedStr === List(List()))
+    }
+  }
+
+  test("pack 1 item list is a 1 item list of 1 item") {
+    new TestLists {
+      val packedInt = ListFunc.pack(oneItemListInt)
+      assert(packedInt === List(List(100)))
+      val packedStr = ListFunc.pack(oneItemListString)
+      assert(packedStr === List(List("hello")))
+    }
+  }
+
+  test("pack many item list with no duplicates") {
+    new TestLists {
+      val packedInt = ListFunc.pack(manyInts)
+      assert(packedInt ===
+        List(List(10), List(20), List(30), List(40), List(50), List(60), List(70), List(80), List(90), List(100)))
+      val packedStr = ListFunc.pack(manyStrings)
+      assert(packedStr ===
+        List(List("long"), List("list"), List("of"), List("strings"), List("to"),
+          List("test"), List("list"), List("functions"), List("ok"), List("hello")))
+    }
+  }
+
+  test("pack lists with 1 item duplicated") {
+    val list2 = ListFunc.pack(List(42, 42))
+    assert(list2 === List(List(42, 42)))
+    val list3 = ListFunc.pack(List("ok", "ok", "ok"))
+    assert(list3 === List(List("ok", "ok", "ok")))
+    val list10 = ListFunc.pack(List(10, 10, 10, 10, 10, 10, 10, 10, 10, 10))
+    assert(list10 === List(List(10, 10, 10, 10, 10, 10, 10, 10, 10, 10)))
+  }
+
+  test("pack list from example") {
+    val packed = ListFunc.pack(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e))
+    assert(packed ===
+      List(List('a, 'a, 'a, 'a), List('b), List('c, 'c), List('a, 'a), List('d), List('e, 'e, 'e, 'e)))
+  }
+
+  test("pack really long list should not stack overflow") {
+    ListFunc.pack(List.range(1, 10001))
   }
 }
