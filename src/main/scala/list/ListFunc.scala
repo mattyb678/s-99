@@ -87,4 +87,8 @@ object ListFunc {
     }
     packRec(ls, List())
   }
+
+  def encode[T] (list: List[T]): List[(Int, T)] = {
+    pack(list).filter(elem => elem.nonEmpty).map(elem => (elem.size, elem.head))
+  }
 }

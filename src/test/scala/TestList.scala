@@ -341,4 +341,47 @@ class TestList extends FunSuite {
   test("pack really long list should not stack overflow") {
     ListFunc.pack(List.range(1, 10001))
   }
+
+  test("encode empty list is empty list") {
+    new TestLists {
+      val encodedInt = ListFunc.encode(emptyListInt)
+      assert(encodedInt === List())
+      val  encodedStr = ListFunc.encode(emptyListString)
+      assert(encodedStr === List())
+    }
+  }
+
+  test("encode 1 item list") {
+    new TestLists {
+      val encodedInt = ListFunc.encode(oneItemListInt)
+      assert(encodedInt === List((1, 100)))
+      val encodedStr = ListFunc.encode(oneItemListString)
+      assert(encodedStr === List((1, "hello")))
+    }
+  }
+
+  test("encode many itemed list with no duplicates") {
+    new TestLists {
+      val packedInt = ListFunc.encode(manyInts)
+      assert(packedInt ===
+        List((1,10), (1,20), (1,30), (1,40), (1,50), (1,60), (1,70), (1,80), (1,90), (1,100)))
+      val packedStr = ListFunc.encode(manyStrings)
+      assert(packedStr ===
+        List((1,"long"), (1,"list"), (1,"of"), (1,"strings"), (1,"to"),
+          (1,"test"), (1,"list"), (1,"functions"), (1,"ok"), (1,"hello")))
+    }
+  }
+
+  test("encode lists with duplicates") {
+    val list2 = ListFunc.encode(List(42, 42))
+    assert(list2 === List((2, 42)))
+    val list3 = ListFunc.encode(List("ok", "ok", "ok"))
+    assert(list3 === List((3, "ok")))
+    val list10 = ListFunc.encode(List(10, 10, 10, 10, 10, 10, 10, 10, 10, 10))
+    assert(list10 === List((10, 10)))
+  }
+
+  test("ecoded really long list should not stack overflow") {
+    ListFunc.encode(List.range(1, 10001))
+  }
 }
