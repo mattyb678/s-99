@@ -105,4 +105,8 @@ object ListFunc {
   def duplicate[T] (list: List[T]): List[T] = {
     list flatMap { elem => List(elem, elem) }
   }
+
+  def duplicateN[T] (n: Int, list: List[T]): List[T] = {
+    list flatMap { elem => List.fill(n)(elem) }
+  }
 }

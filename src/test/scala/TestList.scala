@@ -485,8 +485,6 @@ class TestList extends FunSuite {
     }
   }
 
-//  List(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
-//  List("long", "list", "of", "strings", "to", "test", "list", "functions", "ok", "hello")
   test("duplicate of many item list") {
     new TestLists {
       val duplicateInt = ListFunc.duplicate(manyInts)
@@ -495,5 +493,43 @@ class TestList extends FunSuite {
       assert(duplicateStr === List("long", "long", "list", "list", "of", "of", "strings", "strings",
         "to", "to", "test", "test", "list", "list", "functions", "functions", "ok", "ok", "hello", "hello"))
     }
+  }
+
+  test("duplicate example") {
+    val duplicate = ListFunc.duplicate(List('a, 'b, 'c, 'c, 'd))
+    assert(duplicate === List('a, 'a, 'b, 'b, 'c, 'c, 'c, 'c, 'd, 'd))
+  }
+
+  test("duplicateN of empty List") {
+    new TestLists {
+      val duplicateInt = ListFunc.duplicateN(3, emptyListInt)
+      assert(duplicateInt === List())
+      val duplicateStr = ListFunc.duplicateN(3, emptyListString)
+      assert(duplicateStr === List())
+    }
+  }
+
+  test("duplicateN of 1 item list") {
+    new TestLists {
+      val duplicateInt = ListFunc.duplicateN(4, oneItemListInt)
+      assert(duplicateInt === List(100, 100, 100, 100))
+      val duplicateStr = ListFunc.duplicateN(3, oneItemListString)
+      assert(duplicateStr === List("hello", "hello", "hello"))
+    }
+  }
+
+  test("duplicateN of many item list") {
+    new TestLists {
+      val duplicateInt = ListFunc.duplicateN(3, manyInts)
+      assert(duplicateInt === List(10, 10, 10, 20, 20, 20, 30, 30, 30, 40, 40, 40,
+        50, 50, 50, 60, 60, 60, 70, 70, 70, 80, 80, 80, 90, 90, 90, 100, 100, 100))
+      val duplicateStr = ListFunc.duplicateN(0, manyStrings)
+      assert(duplicateStr === List())
+    }
+  }
+
+  test("duplicateN example") {
+    val duplicate = ListFunc.duplicateN(3, List('a, 'b, 'c, 'c, 'd))
+    assert(duplicate === List('a, 'a, 'a, 'b, 'b, 'b, 'c, 'c, 'c, 'c, 'c, 'c, 'd, 'd, 'd))
   }
 }
