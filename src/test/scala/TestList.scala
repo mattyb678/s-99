@@ -381,7 +381,47 @@ class TestList extends FunSuite {
     assert(list10 === List((10, 10)))
   }
 
-  test("ecoded really long list should not stack overflow") {
+  test("encode really long list should not stack overflow") {
     ListFunc.encode(List.range(1, 10001))
+  }
+
+  test("modified encode empty list is empty list") {
+    new TestLists {
+      val encodedInt = ListFunc.encodeModified(emptyListInt)
+      assert(encodedInt === List())
+      val  encodedStr = ListFunc.encodeModified(emptyListString)
+      assert(encodedStr === List())
+    }
+  }
+
+  test("modified encode 1 item list") {
+    new TestLists {
+      val encodedInt = ListFunc.encodeModified(oneItemListInt)
+      assert(encodedInt === oneItemListInt)
+      val encodedStr = ListFunc.encodeModified(oneItemListString)
+      assert(encodedStr === oneItemListString)
+    }
+  }
+
+  test("modified encode many itemed list with no duplicates") {
+    new TestLists {
+      val packedInt = ListFunc.encodeModified(manyInts)
+      assert(packedInt === manyInts)
+      val packedStr = ListFunc.encodeModified(manyStrings)
+      assert(packedStr === manyStrings)
+    }
+  }
+
+  test("modified encode really long list should not stack overflow") {
+    ListFunc.encodeModified(List.range(1, 10001))
+  }
+
+  test("modified encode lists with duplicates") {
+    val list2 = ListFunc.encodeModified(List(42, 42))
+    assert(list2 === List((2, 42)))
+    val list3 = ListFunc.encodeModified(List("ok", "ok", "ok"))
+    assert(list3 === List((3, "ok")))
+    val list10 = ListFunc.encodeModified(List(10, 10, 10, 10, 10, 10, 10, 10, 10, 10))
+    assert(list10 === List((10, 10)))
   }
 }

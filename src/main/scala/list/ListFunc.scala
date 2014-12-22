@@ -91,4 +91,10 @@ object ListFunc {
   def encode[T] (list: List[T]): List[(Int, T)] = {
     pack(list).filter(elem => elem.nonEmpty).map(elem => (elem.size, elem.head))
   }
+
+  def encodeModified[T] (list: List[T]): List[Any] = {
+    pack(list).filter(elem => elem.nonEmpty).map(elem => {
+      if (elem.size == 1) elem.head else (elem.size, elem.head)
+    })
+  }
 }
