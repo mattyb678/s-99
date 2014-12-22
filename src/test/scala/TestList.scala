@@ -424,4 +424,46 @@ class TestList extends FunSuite {
     val list10 = ListFunc.encodeModified(List(10, 10, 10, 10, 10, 10, 10, 10, 10, 10))
     assert(list10 === List((10, 10)))
   }
+
+  test("decode empty list") {
+    new TestLists {
+      val decodedInt = ListFunc.decode(List[(Int, Int)]())
+      assert(decodedInt === emptyListInt)
+      val decodedStr = ListFunc.decode(List[(Int, String)]())
+      assert(decodedStr === emptyListString)
+    }
+  }
+
+  test("decode 1 item list") {
+    new TestLists {
+      val decodedInt = ListFunc.decode(List((1, 100)))
+      assert(decodedInt === oneItemListInt)
+      val decodedStr = ListFunc.decode(List((1, "hello")))
+      assert(decodedStr === oneItemListString)
+    }
+  }
+
+  test("decode many itemed list, no duplicates") {
+    new TestLists {
+      val decodedInt = ListFunc.decode(List((1,10), (1,20), (1,30), (1,40), (1,50), (1,60), (1,70), (1,80), (1,90), (1,100)))
+      assert(decodedInt === manyInts)
+      val decodedStr = ListFunc.decode(List((1,"long"), (1,"list"), (1,"of"), (1,"strings"), (1,"to"),
+        (1,"test"), (1,"list"), (1,"functions"), (1,"ok"), (1,"hello")))
+      assert(decodedStr === manyStrings)
+    }
+  }
+
+  test("decode list with duplicates") {
+    val decoded1 = ListFunc.decode(List((2, 42)))
+    assert(decoded1 === List(42, 42))
+    val decoded2 = ListFunc.decode(List((3, "ok")))
+    assert(decoded2 === List("ok", "ok", "ok"))
+    val decoded3 = ListFunc.decode(List((10, 10)))
+    assert(decoded3 === List(10, 10, 10, 10, 10, 10, 10, 10, 10, 10))
+  }
+
+  test("decode example list") {
+    val decoded = ListFunc.decode(List((4, 'a), (1, 'b), (2, 'c), (2, 'a), (1, 'd), (4, 'e)))
+    assert(decoded === List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e))
+  }
 }

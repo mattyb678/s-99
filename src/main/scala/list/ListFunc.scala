@@ -97,4 +97,8 @@ object ListFunc {
       if (elem.size == 1) elem.head else (elem.size, elem.head)
     })
   }
+
+  def decode[T] (list: List[(Int, T)]): List[T] = {
+    list flatMap { elem => List.fill(elem._1)(elem._2) }
+  }
 }
